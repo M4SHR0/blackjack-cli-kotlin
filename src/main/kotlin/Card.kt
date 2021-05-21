@@ -1,10 +1,9 @@
 import kotlin.random.Random
 
-class Card {
+class Card(NumberOfCards:Int = 52) {
     private val deck = mutableListOf<Int>()
     init {
-        // TODO 検証用にトランプを10枚にしてる
-        for (i in 0..10){
+        for (i in 0 until NumberOfCards){
             deck.add(i)
         }
     }
