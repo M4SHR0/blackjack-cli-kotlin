@@ -10,11 +10,11 @@ class Card {
     }
 
     fun getCard(): MutableList<Int> {
-        return deck
+        return deck.toMutableList()
     }
 
-    fun shuffle(): MutableList<Int> {
-        val baseDeck = this.deck
+    fun shuffle(recieveDeck: MutableList<Int>): MutableList<Int> {
+        val baseDeck = recieveDeck.toMutableList()
         val shuffled = mutableListOf<Int>()
         var rand: Int
         while (baseDeck.size > 0){
@@ -25,9 +25,10 @@ class Card {
         return shuffled
     }
 
-    fun giveOut(playerCount: Int, cardCount: Int, shuffledDeck:MutableList<Int>): MutableList<MutableList<Int>> {
+    fun giveOut(playerCount: Int, cardCount: Int, recieveDeck:MutableList<Int>): MutableList<MutableList<Int>> {
         var rand:Int
         val dist = mutableListOf<MutableList<Int>>()
+        val shuffledDeck = recieveDeck.toMutableList()
         for (j in 0 until playerCount){
             dist += mutableListOf<Int>()
         }
