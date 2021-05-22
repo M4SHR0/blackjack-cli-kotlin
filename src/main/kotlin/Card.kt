@@ -38,8 +38,6 @@ class Card(NumberOfCards:Int = 52) {
                 shuffledDeck.removeAt(rand)
             }
         }
-        // TODO giveOutメソッド実行後のshuffledDeckの確認
-        println(shuffledDeck)
         return dist
     }
 }
