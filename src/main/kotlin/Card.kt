@@ -24,22 +24,20 @@ class Card(NumberOfCards:Int = 52) {
         return shuffled
     }
 
-    fun giveOut(playerCount: Int, cardCount: Int, recieveDeck:MutableList<Int>): MutableList<MutableList<Int>> {
+    fun giveOut(pCount: Int, cCount: Int, recieveDeck:MutableList<Int>): MutableList<MutableList<Int>> {
         var rand:Int
         val dist = mutableListOf<MutableList<Int>>()
         val shuffledDeck = recieveDeck.toMutableList()
-        for (j in 0 until playerCount){
+        for (j in 0 until pCount){
             dist += mutableListOf<Int>()
         }
-        for (i in 0 until cardCount){
-            for (j in 0 until playerCount) {
+        for (i in 0 until cCount){
+            for (j in 0 until pCount) {
                 rand = Random.nextInt(shuffledDeck.size)
                 dist[j] += shuffledDeck[rand]
                 shuffledDeck.removeAt(rand)
             }
         }
-        // TODO giveOutメソッド実行後のshuffledDeckの確認
-        println(shuffledDeck)
         return dist
     }
 }
