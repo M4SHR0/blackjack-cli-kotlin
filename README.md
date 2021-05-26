@@ -1,0 +1,6 @@
+# blackjack-cli-kotlinについて
+授業課題にて、使用する言語を自由と言われたのでkotlinの理解を深める為にBlackjackを作成
+
+Android開発から入りなんとなくで使っていたkotlinの文法を確認出来た
+
+将来的にこれを基盤としてAndroidアプリを開発してみたい
