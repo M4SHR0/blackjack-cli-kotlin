@@ -5,6 +5,8 @@ class Game(private val playerCounts: Int) {
     private val playerList = mutableListOf<Player>()
 
     fun play(){
+        var flagCounts = 0
+
         // プレイヤーの作成
         for (i in 1 until playerCounts+1){
             val player = Player("player$i")
@@ -23,29 +25,54 @@ class Game(private val playerCounts: Int) {
             for (j in 0 until playerList[i].playerDeck.size){
                 val point = calcScore(playerList[i].playerDeck[j],playerList[i].score)
                 playerList[i].score += point
+                if(playerList[i].score >= 21){
+                    playerList[i].flag = false
+                }
             }
         }
+        scoreCheck()
 
-        // TODO　動作検証用
-        testCheck()
+        // プレイヤー全員が操作不能になるまで　hit　と　stand　の繰り返し
+        while (flagCounts < playerCounts){
+            for (p in playerList) {
+                // stand済みのプレイヤーはパス
+                if (p.flag) {
+                    println("${p.name}, which do you enter 'hit' or 'stand' ....")
+                    var arg = readLine()!!
+                    // hit か stand　じゃない入力の時は無限ループ
+                    while (arg != "hit" && arg != "stand") {
+                        println("Enter 'hit' or 'stand' ....")
+                        arg = readLine()!!
+                    }
+                    if (arg == "hit") {
+                        hit(p)
+                        // もしhitしてバーストしてたらflagをfalseにする
+                        if (!p.flag) {
+                            flagCounts++
+                        }
+                    } else if (arg == "stand") {
+                        stand(p)
+                        flagCounts++
+                    }
+                }
+            }
+            scoreCheck()
+        }
 
+        var winner = "not exist"
+        var topScore = 0
         for (p in playerList){
-            println("${p.name}, which do you enter 'hit' or 'stand' ....")
-            var arg = readLine()!!
-            while (arg != "hit" && arg != "stand"){
-                println("Enter 'hit' or 'stand' ....")
-                arg = readLine()!!
-            }
-            if (arg == "hit"){
-                hit(p)
-            }else{
-                stand(p)
+            if (p.score <= 21) {
+                if (p.score > topScore) {
+                    topScore = p.score
+                    winner = p.name
+                } else if (p.score == topScore) {
+                    winner += "&${p.name}"
+                }
             }
         }
 
-        // TODO　動作検証用
-        testCheck()
-
+        println("Winner is ${winner}!")
     }
 
     private fun draw(cardDeck:MutableList<Int>): Int {
@@ -64,7 +91,7 @@ class Game(private val playerCounts: Int) {
     }
 
     // 確認用
-    private fun testCheck(){
+    private fun scoreCheck(){
         for (p in playerList){
             println("playerName:${p.name}")
             println("playerDeck:${p.playerDeck}")
@@ -74,9 +101,12 @@ class Game(private val playerCounts: Int) {
     }
 
     private fun hit(player:Player){
-        var drawed = draw(card.deck)
+        val drawed = draw(card.deck)
         player.playerDeck.add(drawed)
         player.score += calcScore(drawed,player.score)
+        if (player.score >= 21){
+            player.flag = false
+        }
     }
 
     private fun stand(player:Player){
