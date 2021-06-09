@@ -13,7 +13,8 @@ fun main() {
         println("--------------------")
 
         val game = Game(arg)
-        game.play()
+        //game.pvp()
+        game.pvc()
 
         println("--------------------")
         println("Thank you for playing!")
