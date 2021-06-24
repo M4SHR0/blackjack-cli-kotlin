@@ -113,8 +113,7 @@ class Game(private val playerCounts: Int) {
         player.flag = false
     }
 
-    fun pvc() {
-        var flagCounts = 0
+    fun cvc() {
         var winCounts = 0
         var drawCounts = 0
         var loseCounts = 0
@@ -122,8 +121,10 @@ class Game(private val playerCounts: Int) {
         println("How many loops do you want?")
         val gameCounts = readLine()!!.toInt()
         println("OK,Let's play start!")
+        println("------------")
 
         for (i in 0 until gameCounts) {
+            var flagCounts = 0
             // プレイヤーの作成
             for (i in 1 until playerCounts + 1) {
                 val player = Player("player$i")
@@ -144,11 +145,41 @@ class Game(private val playerCounts: Int) {
                     playerList[i].score += point
                     if (playerList[i].score >= 21) {
                         playerList[i].flag = false
+                        flagCounts++
                     }
                 }
             }
             scoreCheck()
 
+            // flagがtrueのplayerはhit,standを選択し続行できる
+            while (flagCounts < playerCounts){
+                for (p in playerList) {
+                    // stand済みのプレイヤーはパス
+                    if (p.flag) {
+                        // PvPの時が標準入力だったためそのままarg
+                        val arg :String = if (p.score<17){
+                            "hit"
+                        }else{
+                            "stand"
+                        }
+                        if (arg == "hit") {
+                            println("HIT")
+                            hit(p)
+                            // もしhitしてバーストしてたらflagをfalseにする
+                            if (!p.flag) {
+                                flagCounts++
+                            }
+                        } else if (arg == "stand") {
+                            println("STAND")
+                            stand(p)
+                            flagCounts++
+                        }
+                    }
+                }
+                scoreCheck()
+            }
+
+            // 勝利判定と表示
             var winner = "not exist"
             var topScore = 0
             for (p in playerList){
@@ -172,8 +203,10 @@ class Game(private val playerCounts: Int) {
                     loseCounts++
                 }
             }
+
             playerList.clear()
             card = Card()
+            println("------------")
         }
 
         println("win:${winCounts},draw:${drawCounts},lose:${loseCounts}")
