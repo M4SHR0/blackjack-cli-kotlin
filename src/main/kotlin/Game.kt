@@ -138,17 +138,22 @@ class Game(private val playerCounts: Int) {
                 }
             }
 
-            // スコアの計算
-            for (i in 0 until playerList.size) {
-                for (j in 0 until playerList[i].playerDeck.size) {
-                    val point = calcScore(playerList[i].playerDeck[j], playerList[i].score)
-                    playerList[i].score += point
-                    if (playerList[i].score >= 21) {
-                        playerList[i].flag = false
-                        flagCounts++
-                    }
+            // player1のスコア計算
+            for (j in 0 until playerList[0].playerDeck.size) {
+                val point = calcScore(playerList[0].playerDeck[j], playerList[0].score)
+                playerList[0].score += point
+                if (playerList[0].score >= 21) {
+                    playerList[0].flag = false
+                    flagCounts++
                 }
             }
+            // player2は何もしない為flagをfalseに
+            for (j in 0 until playerList[1].playerDeck.size) {
+                val point = calcScore(playerList[1].playerDeck[j], playerList[1].score)
+                playerList[1].score += point
+            }
+            playerList[1].flag = false
+            flagCounts++
             scoreCheck()
 
             // flagがtrueのplayerはhit,standを選択し続行できる
@@ -157,7 +162,7 @@ class Game(private val playerCounts: Int) {
                     // stand済みのプレイヤーはパス
                     if (p.flag) {
                         // PvPの時が標準入力だったためそのままarg
-                        val arg :String = if (p.score<17){
+                        val arg :String = if (p.score<15){
                             "hit"
                         }else{
                             "stand"
